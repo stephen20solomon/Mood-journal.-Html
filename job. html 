@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Jobs Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background: #4CAF50;
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+    }
+    nav {
+      text-align: center;
+      margin-top: 10px;
+      background-color: #333;
+      padding: 10px;
+    }
+    nav a {
+      margin: 0 10px;
+      color: white;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 20px;
+    }
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .section h2 {
+      margin-bottom: 20px;
+    }
+    .search-bar input {
+      padding: 10px;
+      font-size: 1em;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #job-listings {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .job-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      width: 45%;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .job-card:hover {
+      background: #f1f1f1;
+    }
+    .apply-button {
+      background: #4CAF50;
+      color: white;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1em;
+    }
+    .apply-button:hover {
+      background: #45a049;
+    }
+    footer {
+      background: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .landing-page {
+      text-align: center;
+      padding: 50px 0;
+    }
+    .landing-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 10px;
+      display: inline-block;
+    }
+    .landing-btn:hover {
+      background: #45a049;
+    }
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #job-detail {
+      display: none;
+    }
+    .application-form {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .job-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<div id="landing-page" class="landing-page">
+  <h1>Welcome to the Online Jobs Platform</h1>
+  <p>Find your dream job or apply for exciting opportunities.</p>
+  <a href="#" class="landing-btn" onclick="showLoginForm()">Login</a>
+  <a href="#" class="landing-btn" onclick="showRegisterForm()">Register</a>
+  <a href="#" class="landing-btn" onclick="showJobListings()">View Jobs</a>
+</div>
+
+<div id="login-form" class="section" style="display:none;">
+  <h2>Login</h2>
+  <input type="text" class="form-input" id="login-email" placeholder="Email" />
+  <input type="password" class="form-input" id="login-password" placeholder="Password" />
+  <button class="landing-btn" onclick="login()">Login</button>
+  <p>Don't have an account? <a href="#" onclick="showRegisterForm()">Register</a></p>
+</div>
+
+<div id="register-form" class="section" style="display:none;">
+  <h2>Register</h2>
+  <input type="text" class="form-input" id="register-name" placeholder="Full Name" />
+  <input type="email" class="form-input" id="register-email" placeholder="Email" />
+  <input type="password" class="form-input" id="register-password" placeholder="Password" />
+  <button class="landing-btn" onclick="register()">Register</button>
+  <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+</div>
+
+<main id="job-listings" class="section" style="display:none;">
+  <h2>Available Jobs</h2>
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search jobs by title or company" oninput="searchJobs()" />
+  </div>
+  <div id="jobs"></div>
+  <button class="landing-btn" onclick="logout()">Logout</button>
+</main>
+
+<section id="job-detail" class="section">
+  <h2>Job Details</h2>
+  <div id="job-info"></div>
+  <button class="landing-btn" onclick="showApplicationForm()">Apply for Job</button>
+</section>
+
+<section id="application-form-section" class="application-form">
+  <h2>Apply for Job</h2>
+  <form id="application-form">
+    <input type="text" id="applicant-name" placeholder="Your Name" required />
+    <input type="email" id="applicant-email" placeholder="Your Email" required />
+    <textarea id="cover-letter" placeholder="Cover Letter" required></textarea>
+    <button class="landing-btn" type="submit">Submit Application</button>
+  </form>
+</section>
+
+<footer>
+  <p>&copy; 2025 Online Jobs Platform. All rights reserved by Stephen Solomon.</p>
+</footer>
+
+<script>
+  const jobs = [
+    { title: "Web Developer", company: "Tech Solutions", location: "Remote", experience: "3+ years", description: "Web development role for modern websites." },
+    { title: "Graphic Designer", company: "Creative Studio", location: "New York", experience: "2+ years", description: "Creative designer for marketing and branding." },
+    { title: "Software Engineer", company: "Innovative Systems", location: "San Francisco", experience: "5+ years", description: "Software engineer for large-scale systems." }
+  ];
+
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const applications = JSON.parse(localStorage.getItem('applications')) || [];
+
+  function showLandingPage() {
+    document.getElementById('landing-page').style.display = 'block';
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('job-listings').style.display = 'none';
+    document.getElementById('job-detail').style.display = 'none';
+    document.getElementById('application-form-section').style.display = 'none';
+  }
+
+  function showLoginForm() {
+    document.getElementById('landing-page').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+  }
+
+  function showRegisterForm() {
+    document.getElementById('landing-page').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+  }
+
+  function login() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (user) {
+      alert("Login successful!");
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      showJobListings();
+    } else {
+      alert("Invalid credentials. Try again.");
+    }
+  }
+
+  function register() {
+    const name = document.getElementById('register-name').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+
+    users.push({ name, email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert("Registration successful!");
+    showLoginForm();
+  }
+
+  function showJobListings() {
+    document.getElementById('landing-page').style.display = 'none';
+    const jobListings = document.getElementById("jobs");
+    jobListings.innerHTML = "";
+
+    jobs.forEach((job, index) => {
+      const jobCard = document.createElement("div");
+      jobCard.className = "job-card";
+      jobCard.innerHTML = `
+        <h3>${job.title}</h3>
+        <p>Company: ${job.company}</p>
+        <p>Location: ${job.location}</p>
+        <p>Experience: ${job.experience}</p>
+        <button class="apply-button" onclick="applyForJob(${index})">Apply</button>
+      `;
+      jobListings.appendChild(jobCard);
+    });
+
+    document.getElementById('job-listings').style.display = "block";
+  }
+
+  function applyForJob(index) {
+    const job = jobs[index];
+    document.getElementById('job-detail').style.display = 'block';
+    document.getElementById('job-info').innerHTML = `
+      <h3>${job.title}</h3>
+      <p><strong>Company:</strong> ${job.company}</p>
+      <p><strong>Location:</strong> ${job.location}</p>
+      <p><strong>Experience:</strong> ${job.experience}</p>
+      <p><strong>Description:</strong> ${job.description}</p>
+    `;
+  }
+
+  function showApplicationForm() {
+    document.getElementById('application-form-section').style.display = 'block';
+  }
+
+  function logout() {
+    localStorage.removeItem('currentUser');
+    alert("You have logged out successfully!");
+    showLandingPage();
+  }
+
+  showLandingPage();
+</script>
+</body>
+</html>
